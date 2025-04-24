@@ -1,13 +1,13 @@
 import { useRouter } from "next/router";
 
-import { getAllEvents } from "../../dummy-data";
+import { getAllEvents } from "../../helpers/api-util";
 import EventList from "../../components/events/event-list";
 import EventsSearch from "../../components/events/events-search";
 
-function AllEventsPage() {
+function AllEventsPage(props) {
   // useRouter hook'u genelde sayfa bileşenlerinde kullanılır. Bu bileşenler sayfa yönlendirmeleri ve dinamik URL'ler için kullanılır.
   const router = useRouter();
-  const events = getAllEvents();
+  const { events } = props;
 
   // yönlendirme fonksiyonunu burada tanımlıyoruz ki kod daha temiz ve modüler olsun.
   function findEventsHandler(year, month) {
@@ -21,6 +21,17 @@ function AllEventsPage() {
       <EventList items={events} />
     </>
   );
+}
+
+export async function getStaticProps() {
+  const events = await getAllEvents();
+
+  return {
+    props: {
+      events: events,
+    },
+    revalidate: 60, // 60 saniyede bir güncellenmesini istiyoruz. (incremental static generation)
+  };
 }
 
 export default AllEventsPage;
