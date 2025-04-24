@@ -1,3 +1,5 @@
+import Head from "next/head.js";
+
 import { getEventById, getFeaturedEvents } from "../../helpers/api-util.js";
 import EventSummary from "../../components/event-detail/event-summary.js";
 import EventLogistics from "../../components/event-detail/event-logistics.js";
@@ -16,6 +18,10 @@ function EventDetailPage(props) {
 
   return (
     <>
+      <Head>
+        <title>{event.title}</title>
+        <meta name="description" content={event.description} />
+      </Head>
       <EventSummary title={event.title} />
       <EventLogistics
         date={event.date}
